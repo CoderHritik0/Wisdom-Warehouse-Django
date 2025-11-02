@@ -19,7 +19,38 @@
         </div>
 
         <div class="mb-3">
-          {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
+          {{ form.description.label_tag }}
+          <!-- Markdown Toolbar -->
+          <div class="markdown-toolbar mb-2 p-2 border rounded" style="background-color: #2d3748;">
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('heading')" title="Heading">
+              <i class="bi bi-type-h1" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('bold')" title="Bold">
+              <i class="bi bi-type-bold" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('italic')" title="Italic">
+              <i class="bi bi-type-italic" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('quote')" title="Quote">
+              <i class="bi bi-quote" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('code')" title="Code">
+              <i class="bi bi-code-slash" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('link')" title="Link">
+              <i class="bi bi-link-45deg" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('unordered-list')" title="Unordered List">
+              <i class="bi bi-list-ul" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('ordered-list')" title="Ordered List">
+              <i class="bi bi-list-ol" style="color: #e2e8f0;"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-toolbar" onclick="insertMarkdown('task-list')" title="Task List">
+              <i class="bi bi-list-check" style="color: #e2e8f0;"></i>
+            </button>
+          </div>
+          {{ form.description }} {{ form.description.errors }}
         </div>
 
         <div class="mb-3">

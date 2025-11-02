@@ -117,3 +117,60 @@ function setPin() {
     .catch((error) => console.error(error));
   window.location.reload();
 }
+
+/* ---------------------------
+   MARKDOWN TOOLBAR LOGIC
+---------------------------- */
+function insertMarkdown(type) {
+  const textarea = document.getElementById('id_description');
+  if (!textarea) return;
+
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const selectedText = textarea.value.substring(start, end);
+  let replacement = '';
+  let cursorOffset = 0;
+
+  switch (type) {
+    case 'heading':
+      replacement = `# ${selectedText || 'Heading'}`;
+      cursorOffset = selectedText ? replacement.length : 2;
+      break;
+    case 'bold':
+      replacement = `**${selectedText || 'bold text'}**`;
+      cursorOffset = selectedText ? replacement.length : 2;
+      break;
+    case 'italic':
+      replacement = `*${selectedText || 'italic text'}*`;
+      cursorOffset = selectedText ? replacement.length : 1;
+      break;
+    case 'quote':
+      replacement = `> ${selectedText || 'quote'}`;
+      cursorOffset = selectedText ? replacement.length : 2;
+      break;
+    case 'code':
+      replacement = `\`${selectedText || 'code'}\``;
+      cursorOffset = selectedText ? replacement.length : 1;
+      break;
+    case 'link':
+      replacement = `[${selectedText || 'link text'}](url)`;
+      cursorOffset = selectedText ? replacement.length - 4 : 1;
+      break;
+    case 'unordered-list':
+      replacement = `- ${selectedText || 'list item'}`;
+      cursorOffset = selectedText ? replacement.length : 2;
+      break;
+    case 'ordered-list':
+      replacement = `1. ${selectedText || 'list item'}`;
+      cursorOffset = selectedText ? replacement.length : 3;
+      break;
+    case 'task-list':
+      replacement = `- [ ] ${selectedText || 'task'}`;
+      cursorOffset = selectedText ? replacement.length : 6;
+      break;
+  }
+
+  textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = start + cursorOffset;
+}
