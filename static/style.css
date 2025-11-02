@@ -209,3 +209,47 @@ footer {
   background-color: #f8d7da;
   border-color: #f5c2c7;
 }
+
+/* Markdown Toolbar Styles */
+.markdown-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background-color: #2d3748;
+  border-radius: 0.375rem;
+  border: 1px solid #4a5568;
+}
+
+.markdown-btn {
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.markdown-btn:hover {
+  background-color: #4a5568;
+  color: #ffffff;
+}
+
+.markdown-btn:active {
+  background-color: #718096;
+}
+
+.markdown-btn i {
+  font-size: 1rem;
+}
+
+.toolbar-separator {
+  color: #4a5568;
+  padding: 0 0.25rem;
+  user-select: none;
+}

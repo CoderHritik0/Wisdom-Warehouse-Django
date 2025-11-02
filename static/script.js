@@ -117,3 +117,91 @@ function setPin() {
     .catch((error) => console.error(error));
   window.location.reload();
 }
+
+/* ---------------------------
+   MARKDOWN TOOLBAR LOGIC
+---------------------------- */
+document.addEventListener("DOMContentLoaded", function () {
+  const markdownButtons = document.querySelectorAll(".markdown-btn");
+  const textarea = document.getElementById("id_description");
+
+  if (!textarea || markdownButtons.length === 0) return;
+
+  markdownButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const markdownType = this.getAttribute("data-markdown");
+      insertMarkdown(textarea, markdownType);
+    });
+  });
+});
+
+function insertMarkdown(textarea, type) {
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const selectedText = textarea.value.substring(start, end);
+  const beforeText = textarea.value.substring(0, start);
+  const afterText = textarea.value.substring(end);
+
+  let insertText = "";
+  let cursorOffset = 0;
+
+  switch (type) {
+    case "header":
+      insertText = selectedText ? `# ${selectedText}` : "# Heading";
+      cursorOffset = selectedText ? insertText.length : 2;
+      break;
+    case "bold":
+      insertText = selectedText ? `**${selectedText}**` : "**bold text**";
+      cursorOffset = selectedText ? insertText.length : 2;
+      break;
+    case "italic":
+      insertText = selectedText ? `*${selectedText}*` : "*italic text*";
+      cursorOffset = selectedText ? insertText.length : 1;
+      break;
+    case "strikethrough":
+      insertText = selectedText ? `~~${selectedText}~~` : "~~strikethrough~~";
+      cursorOffset = selectedText ? insertText.length : 2;
+      break;
+    case "code":
+      insertText = selectedText ? "`${selectedText}`" : "`code`";
+      cursorOffset = selectedText ? insertText.length : 1;
+      break;
+    case "link":
+      insertText = selectedText
+        ? `[${selectedText}](url)`
+        : "[link text](url)";
+      cursorOffset = selectedText ? start + selectedText.length + 3 : start + 1;
+      break;
+    case "ul":
+      insertText = selectedText
+        ? `- ${selectedText}`
+        : "- List item";
+      cursorOffset = selectedText ? insertText.length : 2;
+      break;
+    case "ol":
+      insertText = selectedText
+        ? `1. ${selectedText}`
+        : "1. List item";
+      cursorOffset = selectedText ? insertText.length : 3;
+      break;
+    case "checklist":
+      insertText = selectedText
+        ? `- [ ] ${selectedText}`
+        : "- [ ] Task item";
+      cursorOffset = selectedText ? insertText.length : 6;
+      break;
+    default:
+      return;
+  }
+
+  textarea.value = beforeText + insertText + afterText;
+  
+  // Set cursor position
+  if (selectedText) {
+    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
+  } else {
+    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
+  }
+  
+  textarea.focus();
+}

@@ -19,7 +19,40 @@
         </div>
 
         <div class="mb-3">
-          {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
+          {{ form.description.label_tag }}
+          <!-- Markdown Toolbar -->
+          <div class="markdown-toolbar mb-2">
+            <button type="button" class="markdown-btn" data-markdown="header" title="Header">
+              <i class="bi bi-type-h1"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="bold" title="Bold">
+              <i class="bi bi-type-bold"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="italic" title="Italic">
+              <i class="bi bi-type-italic"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="strikethrough" title="Strikethrough">
+              <i class="bi bi-type-strikethrough"></i>
+            </button>
+            <span class="toolbar-separator">|</span>
+            <button type="button" class="markdown-btn" data-markdown="code" title="Code">
+              <i class="bi bi-code-slash"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="link" title="Link">
+              <i class="bi bi-link-45deg"></i>
+            </button>
+            <span class="toolbar-separator">|</span>
+            <button type="button" class="markdown-btn" data-markdown="ul" title="Bullet List">
+              <i class="bi bi-list-ul"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="ol" title="Numbered List">
+              <i class="bi bi-list-ol"></i>
+            </button>
+            <button type="button" class="markdown-btn" data-markdown="checklist" title="Checklist">
+              <i class="bi bi-list-check"></i>
+            </button>
+          </div>
+          {{ form.description }} {{ form.description.errors }}
         </div>
 
         <div class="mb-3">
