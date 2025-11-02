@@ -20,66 +20,75 @@ document.addEventListener("DOMContentLoaded", function () {
   const deleteModal = document.getElementById("deleteModal");
   const confirmBtn = document.getElementById("confirmDeleteBtn");
 
-  let deleteType = null;
-  let deleteId = null;
-  let triggerBtn = null;
+  if (deleteModal && confirmBtn) {
+    let deleteType = null;
+    let deleteId = null;
+    let triggerBtn = null;
 
-  deleteModal.addEventListener("show.bs.modal", function (event) {
-    const button = event.relatedTarget;
-    deleteType = button.getAttribute("data-type");
-    deleteId =
-      deleteType === "note"
-        ? button.getAttribute("data-note-id")
-        : button.getAttribute("data-image-id");
-    triggerBtn = button;
-  });
-
-  confirmBtn.addEventListener("click", async function () {
-    if (!deleteId || !deleteType) return;
-
-    let url = "";
-    if (deleteType === "note") {
-      url = `/notes/${deleteId}/delete/`;
-    } else if (deleteType === "image") {
-      url = `/notes/delete_image/${deleteId}/`;
-    }
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "X-CSRFToken": getCookie("csrftoken") },
+    deleteModal.addEventListener("show.bs.modal", function (event) {
+      const button = event.relatedTarget;
+      deleteType = button.getAttribute("data-type");
+      deleteId =
+        deleteType === "note"
+          ? button.getAttribute("data-note-id")
+          : button.getAttribute("data-image-id");
+      triggerBtn = button;
     });
 
-    const modal = bootstrap.Modal.getInstance(deleteModal);
-    if (modal) modal.hide();
+    confirmBtn.addEventListener("click", async function () {
+      if (!deleteId || !deleteType) return;
 
-    triggerBtn.closest(".position-relative").remove();
-
-    if (response.ok) {
+      let url = "";
       if (deleteType === "note") {
-        window.location.reload();
+        url = `/notes/${deleteId}/delete/`;
       } else if (deleteType === "image") {
-        const imageContainer = triggerBtn.closest(".position-relative");
-        imageContainer.style.transition = "opacity 0.3s";
-        imageContainer.style.opacity = "0";
-        setTimeout(() => imageContainer.remove(), 300);
+        url = `/notes/delete_image/${deleteId}/`;
       }
-    } else {
-      alert("Error deleting item.");
-    }
-  });
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+      });
+
+      if (typeof bootstrap !== 'undefined') {
+        const modal = bootstrap.Modal.getInstance(deleteModal);
+        if (modal) modal.hide();
+      }
+
+      if (triggerBtn) {
+        triggerBtn.closest(".position-relative").remove();
+      }
+
+      if (response.ok) {
+        if (deleteType === "note") {
+          window.location.reload();
+        } else if (deleteType === "image") {
+          const imageContainer = triggerBtn.closest(".position-relative");
+          if (imageContainer) {
+            imageContainer.style.transition = "opacity 0.3s";
+            imageContainer.style.opacity = "0";
+            setTimeout(() => imageContainer.remove(), 300);
+          }
+        }
+      } else {
+        alert("Error deleting item.");
+      }
+    });
+  }
 
   /* ---------------------------
      HIDE NOTE + SET PIN LOGIC
   ---------------------------- */
   const checkbox = document.getElementById("id_is_hidden");
   const modalEl = document.getElementById("hideNotesModal");
-  const modal = new bootstrap.Modal(modalEl);
 
-  if (!checkbox) return;
-
-  checkbox.addEventListener("change", function () {
-    modal.show();
-  });
+  if (checkbox && modalEl && typeof bootstrap !== 'undefined') {
+    const modal = new bootstrap.Modal(modalEl);
+    
+    checkbox.addEventListener("change", function () {
+      modal.show();
+    });
+  }
 });
 function setPin() {
   const closeHideModalBtn = document.getElementById("closeHideModalBtn");
@@ -163,7 +172,7 @@ function insertMarkdown(textarea, type) {
       cursorOffset = selectedText ? insertText.length : 2;
       break;
     case "code":
-      insertText = selectedText ? "`${selectedText}`" : "`code`";
+      insertText = selectedText ? `\`${selectedText}\`` : "`code`";
       cursorOffset = selectedText ? insertText.length : 1;
       break;
     case "link":
