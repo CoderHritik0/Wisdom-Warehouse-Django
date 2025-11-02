@@ -206,11 +206,6 @@ function insertMarkdown(textarea, type) {
   textarea.value = beforeText + insertText + afterText;
   
   // Set cursor position
-  if (selectedText) {
-    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
-  } else {
-    textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
-  }
-  
+  textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
   textarea.focus();
 }
