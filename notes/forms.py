@@ -10,7 +10,7 @@ class NoteForm(forms.ModelForm):
         fields = ['title', 'description', 'tag', 'color', 'is_hidden']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter note title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Write your note here...'}),
+            'description': forms.Textarea(attrs={'id':'id_description', 'name':'description', 'class': 'form-control', 'placeholder': 'Enter note description', 'rows': 5}),
             'tag': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter note tag'}),
             'color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control'}),
             'is_hidden': forms.CheckboxInput(attrs={'class': 'form-check-input'}),

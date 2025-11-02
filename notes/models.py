@@ -1,7 +1,11 @@
+from pydoc import html
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import bleach
+import markdown
+from django.utils.safestring import mark_safe
 
 # Create your models here.
 class note(models.Model):
@@ -15,6 +19,11 @@ class note(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def formatted_description(self):
+        html = markdown.markdown(self.description, extensions=['fenced_code', 'tables'])
+        clean_html = bleach.clean(html, tags=['p','pre','code','strong','em','ul','ol','li','a','h1','h2','h3','blockquote'])
+        return mark_safe(clean_html)
 
     def __str__(self):
         return f'{self.user.username} - {self.note_id}';
