@@ -11,7 +11,7 @@
         {% if note.note_id %}Edit Note{% else %}Create a New Note{% endif %}
       </h2>
 
-      <form method="post" enctype="multipart/form-data">
+      <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %} {{ form.non_field_errors }}
 
         <div class="mb-3">
@@ -19,8 +19,14 @@
         </div>
 
         <div class="mb-3">
-          {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
+          <div class="note-description">
+            {{ form.description.label_tag }}
+            {{ form.description }} {{ form.description.errors }}
+          </div>
         </div>
+        <script>
+          var easyMDE = new EasyMDE({ element: document.getElementById("id_description") });
+        </script>
 
         <div class="mb-3">
           <label for="id_images" class="form-label">Upload Images</label>

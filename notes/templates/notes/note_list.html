@@ -63,7 +63,15 @@
       <h5 class="card-title fw-bold">{{ note.title|default:"" }}</h5>
 
       <!-- Description -->
-      <p class="card-text">{{ note.description|linebreaks }}</p>
+      <p class="card-text">
+        <div class="note-description">
+          {{ note.formatted_description | linebreaksbr | safe }}
+        </div>
+        
+        <script>
+          var easyMDE = new EasyMDE({ element: document.getElementById("id_description") });
+        </script>
+      </p>
 
       <!-- Footer -->
       <div class="d-flex justify-content-between align-items-center mt-3">
