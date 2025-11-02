@@ -1,12 +1,13 @@
+from django.contrib import messages
+from .models import Profile, note, note_image
+from .forms import NoteForm, NoteImageForm, UserRegistrationForm, AuthenticationForm, PinSetForm, PinCheckForm, ProfileForm, CustomPasswordResetForm, PasswordChangeForm, PinResetForm, setPinForm, DeleteAccountForm
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
-from django.shortcuts import render
-from .models import note, note_image
-from .forms import NoteForm, NoteImageForm, UserRegistrationForm, AuthenticationForm, PinUpdateForm, PinCheckForm
-from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
 
 # Create your views here.
 @login_required
@@ -14,14 +15,13 @@ def index(request):
     """Display all non-hidden notes, or handle PIN verification to show hidden notes."""
     hidden = False
     form = PinCheckForm(request.POST or None)
+    profile = request.user.profile
 
     # ✅ Handle PIN form submission
     if request.method == "POST" and form.is_valid():
         input_pin = form.cleaned_data.get('pin')
-        profile = request.user.profile
 
         if profile and check_password(input_pin, profile.pin):
-            request.session['pin_verified'] = True
             return redirect('hidden_notes')
         else:
             form.add_error('pin', 'Incorrect PIN. Please try again.')
@@ -39,7 +39,7 @@ def index(request):
     return render(
         request,
         'notes/index.html',
-        {'notes': notes, 'PinCheckForm': form, 'hidden': hidden}
+        {'notes': notes, 'PinCheckForm': form, 'hidden': hidden, 'profile': profile}
     )
 
 @require_POST
@@ -83,7 +83,7 @@ def create_or_edit_note(request, note_id=None):
         "form": form,
         "image_form": image_form,
         "note": note_instance,
-        "pin_form": PinUpdateForm(request)
+        "pin_form": PinSetForm(request)
     })
 
 
@@ -96,22 +96,14 @@ def delete_note(request, note_id):
 
 @login_required
 def show_hidden_notes(request):
-    """Show hidden notes only if user has recently verified PIN."""
-    pin_verified = request.session.get('pin_verified', False)
-
-    # ✅ Optional timeout: re-verify after 10 minutes
-    if pin_verified:
-        hidden = True
-        notes = (
-            note.objects.filter(user=request.user, is_deleted=False, is_hidden=True)
-            .prefetch_related('note_image_set')
-            .order_by('-updated_at')
-        )
-        process_note_images(notes)
-        return render(request, 'notes/index.html', {'notes': notes, 'hidden': hidden})
-
-    # Redirect if not verified
-    return redirect('index')
+    hidden = True
+    notes = (
+        note.objects.filter(user=request.user, is_deleted=False, is_hidden=True)
+        .prefetch_related('note_image_set')
+        .order_by('-updated_at')
+    )
+    process_note_images(notes)
+    return render(request, 'notes/index.html', {'notes': notes, 'hidden': hidden})
 
 def signup(request):
     # print("signup view")
@@ -175,3 +167,149 @@ def process_note_images(notes):
             else:
                 img.scaled_height, img.half_diff = 0, 0
         n.processed_images = images
+
+@login_required
+def profile(request):
+    user = request.user
+    profile = user.profile  # shortcut
+
+    if request.method == "POST":
+        # Detect which form was submitted
+        if "update_profile" in request.POST:
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+            password_change_form = PasswordChangeForm()  # keep empty for rendering
+            pin_reset_form = PinResetForm()  # keep empty for rendering
+            pin_set_form = setPinForm()  # keep empty for rendering
+            delete_account_form = DeleteAccountForm()  # keep empty for rendering
+
+            if form.is_valid():
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                pin = form.cleaned_data.get('pin')
+                profile_picture = form.cleaned_data.get('profile_picture')
+
+                if pin:
+                    profile.pin = make_password(pin)
+                if profile_picture:
+                    profile.profile_picture = profile_picture
+                if first_name:
+                    user.first_name = first_name
+                if last_name:
+                    user.last_name = last_name
+
+                user.save()
+                profile.save()
+                messages.success(request, "Profile updated successfully.")
+                return redirect("profile")
+            else:
+                messages.error(request, "Fill in the profile form correctly.")
+
+        elif "change_password" in request.POST:
+            password_change_form = PasswordChangeForm(request.POST)
+            form = ProfileForm(instance=profile)
+            pin_reset_form = PinResetForm()  # keep empty for rendering
+            pin_set_form = setPinForm()  # keep empty for rendering
+            delete_account_form = DeleteAccountForm()  # keep empty for rendering
+
+            if password_change_form.is_valid():
+                current_password = password_change_form.cleaned_data.get('current_password')
+                new_password = password_change_form.cleaned_data.get('new_password')
+                confirm_password = password_change_form.cleaned_data.get('confirm_password')
+
+                if not user.check_password(current_password):
+                    password_change_form.add_error('current_password', 'Current password is incorrect.')
+                    messages.error(request, "Fill in the password form correctly.")
+                elif new_password != confirm_password:
+                    password_change_form.add_error('confirm_password', 'New password and confirmation do not match.')
+                    messages.error(request, "Fill in the password form correctly.")
+                else:
+                    user.set_password(new_password)
+                    user.save()
+                    return redirect('login')
+            else:
+                messages.error(request, "Fill in the password form correctly.")
+        elif "reset_pin" in request.POST:
+            pin_reset_form = PinResetForm(request.POST)
+            form = ProfileForm(instance=profile)
+            password_change_form = PasswordChangeForm()
+            pin_set_form = setPinForm()
+            delete_account_form = DeleteAccountForm()
+
+            if pin_reset_form.is_valid():
+                new_pin = pin_reset_form.cleaned_data.get('new_pin')
+                current_pin = pin_reset_form.cleaned_data.get('current_pin')
+                if profile.pin and not check_password(current_pin, profile.pin):
+                    pin_reset_form.add_error('current_pin', 'Current PIN is incorrect.')
+                    messages.error(request, "Please enter the correct current PIN.")
+                    return render(
+                        request,
+                        "registration/profile.html",
+                        {
+                            "form": form,
+                            "user": user,
+                            "profile": profile,
+                            "password_change_form": password_change_form,
+                            "pin_reset_form": pin_reset_form
+                        }
+                    )
+                profile.pin = make_password(new_pin)
+                profile.save()
+                messages.success(request, "PIN reset successfully.")
+                return redirect("profile")
+            else:
+                messages.error(request, "Please enter the correct current PIN.")
+        elif "pin_set_form" in request.POST:
+            pin_set_form = setPinForm(request.POST)
+            form = ProfileForm(instance=profile)
+            password_change_form = PasswordChangeForm()
+            pin_reset_form = PinResetForm()
+            delete_account_form = DeleteAccountForm()
+
+            if pin_set_form.is_valid():
+                new_pin = pin_set_form.cleaned_data.get('pin')
+                profile.pin = make_password(new_pin)
+                profile.save()
+                messages.success(request, "PIN set successfully.")
+                return redirect("profile")
+            else:
+                print(pin_set_form.errors)
+                messages.error(request, "Fill in the PIN set form correctly.")
+        elif "delete_account" in request.POST:
+            delete_account_form = DeleteAccountForm(request.POST)
+            form = ProfileForm(instance=profile)
+            password_change_form = PasswordChangeForm()
+            pin_reset_form = PinResetForm()
+            pin_set_form = setPinForm()
+
+            if delete_account_form.is_valid():
+                confirmation = delete_account_form.cleaned_data.get('confirm')
+                if confirmation == "DELETE":
+                    user.delete()
+                    messages.success(request, "Account deleted successfully.")
+                    return redirect('signup')
+                else:
+                    delete_account_form.add_error('confirm', 'You must type DELETE to confirm account deletion.')
+                    messages.error(request, "Please fill in the delete account field correctly.")
+    else:
+        form = ProfileForm(instance=profile)
+        form.fields['first_name'].initial = user.first_name
+        form.fields['last_name'].initial = user.last_name
+        password_change_form = PasswordChangeForm()
+        pin_reset_form = PinResetForm()
+        pin_set_form = setPinForm()
+        delete_account_form = DeleteAccountForm()
+
+    return render(
+        request,
+        "registration/profile.html",
+        {
+            "form": form,
+            "user": user,
+            "profile": profile,
+            "password_change_form": password_change_form,
+            "pin_reset_form": pin_reset_form,
+            "pin_set_form": pin_set_form,
+            "delete_account_form": delete_account_form
+        }
+    )
+
