@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         headers: { "X-CSRFToken": getCookie("csrftoken") },
       });
 
-      if (typeof bootstrap !== 'undefined') {
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal && bootstrap.Modal.getInstance) {
         const modal = bootstrap.Modal.getInstance(deleteModal);
         if (modal) modal.hide();
       }
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const checkbox = document.getElementById("id_is_hidden");
   const modalEl = document.getElementById("hideNotesModal");
 
-  if (checkbox && modalEl && typeof bootstrap !== 'undefined') {
+  if (checkbox && modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
     const modal = new bootstrap.Modal(modalEl);
     
     checkbox.addEventListener("change", function () {
@@ -179,7 +179,7 @@ function insertMarkdown(textarea, type) {
       insertText = selectedText
         ? `[${selectedText}](url)`
         : "[link text](url)";
-      cursorOffset = selectedText ? start + selectedText.length + 3 : start + 1;
+      cursorOffset = selectedText ? insertText.length : 1;
       break;
     case "ul":
       insertText = selectedText
