@@ -6,7 +6,7 @@
 <!-- Header/Navigation -->
   <header class="bg-white shadow-sm sticky-top z-3">
     <nav class="container navbar navbar-expand-md py-2">
-      {% if request.path == '/notes/create/'  or '/notes/edit/' in request.path %}
+      {% if request.path == '/notes/create/'  or '/notes/edit/' in request.path  or '/profile/' in request.path %}
         <a href="{% url 'index' %}" class="btn btn-outline-secondary rounded-pill px-4 me-3 fw-semibold d-flex align-items-center gap-2"><i class="bi bi-arrow-left"></i></a>
         <a class="navbar-brand fs-4 fw-bold text-dark" href="{% url 'index' %}">Wisdom Warehouse</a>
         <div class="collapse navbar-collapse" id="main-nav">
@@ -40,13 +40,15 @@
                 aria-expanded="false"
               >
                 <img
-                  src="https://placehold.co/40x40/E0E7FF/4F46E5?text={{ request.user.username|first|upper }}"
+                  src="{% if request.user.profile.profile_picture %}{{ request.user.profile.profile_picture.url }} {% else %}https://placehold.co/40x40/E0E7FF/4F46E5?text={{ request.user.username|first|upper }}{% endif %}"
                   class="rounded-circle"
                   alt="User Avatar"
+                  width="40"
+                  height="40"
                 />
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item {% if '/profile/' in request.path %}disabled{% endif %}" href="{% url 'profile' %}">Profile</a></li>
                 <li>
                   {% if 'hidden' in request.path %}
                     <a class="dropdown-item" href="{% url 'index' %}" id="viewHiddenBtn"

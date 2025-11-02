@@ -1,0 +1,154 @@
+{% extends "login_layout.html" %}
+
+{% load static %}
+
+{% block title %}Profile | Wisdom WareHouse{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+<main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-4">Account Settings</h1>
+
+                <!-- Personal Information Card -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-semibold mb-4">Personal Information</h5>
+                        <form id="profileForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="text-center mb-4">
+                                <img src="{% if request.user.profile.profile_picture %}{{ request.user.profile.profile_picture.url }} {% else %}https://placehold.co/40x40/E0E7FF/4F46E5?text={{ request.user.username|first|upper }}{% endif %}" id="profileAvatar" class="rounded-circle mb-3" alt="Profile Picture" width="120" height="120">
+                                <div class="row justify-content-center">
+                                    {{form.profile_picture.label_tag}}
+                                    {{form.profile_picture}}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{form.first_name.label_tag}}
+                                {{form.first_name}}
+                            </div>
+                            <div class="mb-3">
+                                {{form.last_name.label_tag}}
+                                {{form.last_name}}
+                            </div>
+                            <div class="mb-3">
+                                {% if request.user.email %}
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" value="{{ request.user.email }}" disabled>
+                                    <div class="form-text">Your email address cannot be changed.</div>
+                                {% else %}
+                                    {{form.email.label_tag}}
+                                    {{form.email}}
+                                {% endif %}
+                            </div>
+                            <button type="submit" name="update_profile" class="btn btn-primary fw-semibold px-4">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password Card -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-semibold mb-4">Change Password</h5>
+                        <form id="passwordForm" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ password_change_form.current_password.label_tag }}
+                                {{ password_change_form.current_password }}
+                                {{ password_change_form.current_password.errors }}
+                            </div>
+                            <div class="mb-3">
+                                {{ password_change_form.new_password.label_tag }}
+                                {{ password_change_form.new_password }}
+                                {{ password_change_form.new_password.errors }}
+                            </div>
+                             <div class="mb-3">
+                                {{ password_change_form.confirm_password.label_tag }}
+                                {{ password_change_form.confirm_password }}
+                                {{ password_change_form.confirm_password.errors }}
+                            </div>
+                            <button type="submit" name="change_password" class="btn btn-primary fw-semibold px-4">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Security PIN Card -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-semibold mb-4">Security PIN</h5>
+                        {% if request.user.profile.pin %}
+                            <p class="text-muted">update the 6-digit PIN used to hide and view sensitive notes.</p>
+                            <form id="pinForm" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ pin_reset_form.current_pin.label_tag }}
+                                        {{ pin_reset_form.current_pin }}
+                                        {{ pin_reset_form.current_pin.errors }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ pin_reset_form.new_pin.label_tag }}
+                                        {{ pin_reset_form.new_pin }}
+                                        {{ pin_reset_form.new_pin.errors }}
+                                    </div>
+                                </div>
+                                <button type="submit" name="reset_pin" class="btn btn-primary fw-semibold px-4">Update PIN</button>
+                            </form>
+                        {% else %}
+                            <p class="text-muted">Set the 6-digit PIN used to hide and view sensitive notes.</p>
+                            <form id="setPinForm" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ pin_set_form.pin.label_tag }}
+                                        {{ pin_set_form.pin }}
+                                        {{ pin_set_form.pin.errors }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                    </div>
+                                </div>
+                                <button type="submit" name="pin_set_form" class="btn btn-primary fw-semibold px-4">Set PIN</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+
+                 <!-- Danger Zone Card -->
+                <div class="card shadow-sm border-danger border-2 mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-semibold text-danger mb-3">Danger Zone</h5>
+                        <p class="text-muted">Deleting your account is permanent and will remove all your data, including all your notes. This action cannot be undone.</p>
+                        <!-- Add a confirmation modal for this button -->
+                        <form id="deleteAccountForm" method="post">
+                            {% csrf_token %}
+                            <div class="row align-items-end">
+
+                                <div class="col-md-6 mb-3">
+                                    {{ delete_account_form.confirm.label_tag }}
+                                    {{ delete_account_form.confirm }}
+                                    {{ delete_account_form.confirm.errors }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button type="submit" name="delete_account" class="btn btn-danger fw-semibold px-4">Delete My Account</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block footer %} {% endblock %}
