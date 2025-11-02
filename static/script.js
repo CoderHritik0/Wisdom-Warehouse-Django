@@ -154,7 +154,7 @@ function insertMarkdown(type) {
       break;
     case 'link':
       replacement = `[${selectedText || 'link text'}](url)`;
-      cursorOffset = selectedText ? replacement.length - 4 : 1;
+      cursorOffset = selectedText ? replacement.length - 4 : 11;
       break;
     case 'unordered-list':
       replacement = `- ${selectedText || 'list item'}`;

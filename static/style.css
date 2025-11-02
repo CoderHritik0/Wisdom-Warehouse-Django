@@ -215,6 +215,7 @@ footer {
   display: flex;
   gap: 0.25rem;
   flex-wrap: wrap;
+  background-color: #2d3748;
 }
 
 .btn-toolbar {
@@ -231,4 +232,8 @@ footer {
 
 .btn-toolbar:active {
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-toolbar i {
+  color: #e2e8f0;
 }
