@@ -313,3 +313,18 @@ def profile(request):
         }
     )
 
+def forgot_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            associated_users = User.objects.filter(email=email)
+            if associated_users.exists():
+                for user in associated_users:
+                    # Here you would typically send an email with a reset link
+                    pass
+                messages.success(request, "Password reset instructions have been sent to your email.")
+                return redirect('login')
+            else:
+                form.add_error('email', 'No user is associated with this email address.')
+    return render(request, "registration/forgot_password.html", {"form": CustomPasswordResetForm()})

@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Login | NotesApp{% endblock %}
+{% block title %}Login | Wisdom Warehouse{% endblock %}
 
 {% block login %}{% endblock %}
 
@@ -61,7 +61,7 @@
                       Remember me
                     </label>
                   </div>
-                  <a href="#" class="text-decoration-none link-primary fw-medium"
+                  <a href="{% url "password_reset" %}" class="text-decoration-none link-primary fw-medium"
                     >Forgot password?</a
                   >
                 </div>
