@@ -3,6 +3,9 @@ from .models import note, note_image, Profile
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthForm
 from django.contrib.auth.models import User
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
 
 class NoteForm(forms.ModelForm):
     class Meta:
@@ -131,12 +134,23 @@ class ProfileForm(forms.ModelForm):
 
 class CustomPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter your registered email',
-            'id': 'floatingEmail'
-        })
+    widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter your registered email',
+        'id': 'floatingEmail'
+    })
     )
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        subject = render_to_string(subject_template_name, context)
+        subject = ''.join(subject.splitlines())
+        body = render_to_string(email_template_name, context)
+
+        email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
+        if html_email_template_name:
+            html_email = render_to_string(html_email_template_name, context)
+            email_message.attach_alternative(html_email, 'text/html')
+        email_message.send()
 
 class PasswordChangeForm(forms.Form):
     current_password = forms.CharField(
