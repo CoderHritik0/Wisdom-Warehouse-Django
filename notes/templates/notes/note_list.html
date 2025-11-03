@@ -60,12 +60,12 @@
 
     <!-- 🔹 Card Body -->
     <div class="card-body">
-      <h5 class="card-title fw-bold">{{ note.title|default:"" }}</h5>
+      <h1 class="card-title fw-bold opacity-25">{{ note.title|default:"" }}</h1>
 
       <!-- Description -->
       <p class="card-text">
         <div class="note-description">
-          {{ note.formatted_description | linebreaksbr | safe }}
+          {{ note.formatted_description | safe }}
         </div>
         
         <script>
