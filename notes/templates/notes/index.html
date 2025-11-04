@@ -5,8 +5,50 @@
 {% block title %}{% if hidden %}Hidden Notes{% else %}Notes List{% endif %} | Wisdom WareHouse{% endblock %}
 
 {% block content %}
-  <div class="container py-5">
+<div class="container py-5">
+    <form method="get" class="d-flex gap-2 align-items-center mb-4">
+      <!-- Search bar -->
+       <div class="input-group" style="width: auto;">
+         <input
+           type="text"
+           name="search"
+           value="{{ request.GET.search }}"
+           class="form-control"
+           data-bs-toggle="tooltip"
+           data-bs-title="Press Enter to submit."
+           placeholder="Search notes..."
+           style="max-width: 250px;"
+           onkeyup="if(event.key === 'Enter') this.form.submit();"
+         />
+      </div>
+      <div class="input-group" style="width: max-content;">
+        <label class="input-group-text">Tag</label>
+        <select name="tag" class="form-select" onchange="this.form.submit()">
+          <option value="all">All</option>
+          {% for t in all_tags %}
+            <option value="{{ t }}" {% if selected_tag == t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    
+      <div class="input-group" style="width: max-content;">
+        <label class="input-group-text">Color</label>
+        <select name="color" class="form-select" onchange="this.form.submit()">
+          <option value="all">All</option>
+          {% for c in all_colors %}
+            <option value="{{ c }}" {% if selected_color == c %}selected{% endif %}>{{ c|title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    
+      {% if selected_tag != 'all' or selected_color != 'all' %}
+        <a href="{% url 'index' %}" class="btn btn-outline-danger ms-auto">
+          Clear Filters ✖
+        </a>
+      {% endif %}
+    </form>
     {% if notes %}
+
       <div class="masonry">{% include "notes/note_list.html" %}</div>
     {% else %}
       <div class="text-center text-muted py-4">No notes yet.</div>

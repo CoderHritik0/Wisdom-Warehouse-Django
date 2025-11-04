@@ -8,6 +8,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
+from django.db.models import Q
+
 
 # Create your views here.
 @login_required
@@ -16,6 +18,11 @@ def index(request):
     hidden = False
     form = PinCheckForm(request.POST or None)
     profile = request.user.profile
+    user = request.user
+
+    tag = request.GET.get('tag')
+    color = request.GET.get('color')
+    search = request.GET.get('search')
 
     # ✅ Handle PIN form submission
     if request.method == "POST" and form.is_valid():
@@ -28,19 +35,96 @@ def index(request):
 
     # ✅ Fetch visible notes
     notes = (
-        note.objects.filter(user=request.user, is_deleted=False, is_hidden=False)
+        note.objects.filter(user=user, is_deleted=False, is_hidden=hidden)
         .prefetch_related('note_image_set')  # Optimized image fetch
         .order_by('-updated_at')
     )
 
+    notes, all_tags, all_colors = filter_notes(tag, color, user, notes, hidden, search)
     # ✅ Preprocess note images (common logic)
     process_note_images(notes)
 
     return render(
         request,
         'notes/index.html',
-        {'notes': notes, 'PinCheckForm': form, 'hidden': hidden, 'profile': profile}
+        {'notes': notes, 'all_tags': all_tags, 'all_colors': all_colors, 'selected_tag': tag or "all", 'selected_color': color or "all", 'PinCheckForm': form, 'hidden': hidden, 'profile': profile}
     )
+
+@login_required
+def show_hidden_notes(request):
+    hidden = True
+    profile = request.user.profile
+    user = request.user
+    tag = request.GET.get('tag')
+    color = request.GET.get('color')
+    search = request.GET.get('search')
+
+    notes = (
+        note.objects.filter(user=request.user, is_deleted=False, is_hidden=hidden)
+        .prefetch_related('note_image_set')
+        .order_by('-updated_at')
+    )
+    notes, all_tags, all_colors = filter_notes(tag, color, user, notes, hidden, search)
+    process_note_images(notes)
+    return render(request, 'notes/index.html', {'notes': notes, 'all_tags': all_tags, 'all_colors': all_colors, 'selected_tag': tag or "all", 'selected_color': color or "all", 'hidden': hidden})
+
+def filter_notes(tag, color, user, notes=None, hidden=False, search=None):
+    """Filter notes by tag, color, and optional search query."""
+
+    # --- Apply tag and color filters ---
+    if tag and tag != "all":
+        notes = notes.filter(tag__iexact=tag)
+    if color and color != "all":
+        notes = notes.filter(color__iexact=color)
+
+    # --- Apply search filter ---
+    if search and search.strip():
+        notes = notes.filter(
+            Q(title__icontains=search) |
+            Q(description__icontains=search) |
+            Q(tag__icontains=search)
+        )
+
+    # --- Build Dropdown Lists (context-aware) ---
+    if tag and tag != "all":
+        all_colors = (
+            note.objects
+            .filter(user=user, is_hidden=hidden, tag__iexact=tag)
+            .exclude(color__isnull=True)
+            .exclude(color__exact="")
+            .values_list('color', flat=True)
+            .distinct()
+        )
+    else:
+        all_colors = (
+            note.objects
+            .filter(user=user, is_hidden=hidden)
+            .exclude(color__isnull=True)
+            .exclude(color__exact="")
+            .values_list('color', flat=True)
+            .distinct()
+        )
+
+    if color and color != "all":
+        all_tags = (
+            note.objects
+            .filter(user=user, is_hidden=hidden, color__iexact=color)
+            .exclude(tag__isnull=True)
+            .exclude(tag__exact="")
+            .values_list('tag', flat=True)
+            .distinct()
+        )
+    else:
+        all_tags = (
+            note.objects
+            .filter(user=user, is_hidden=hidden)
+            .exclude(tag__isnull=True)
+            .exclude(tag__exact="")
+            .values_list('tag', flat=True)
+            .distinct()
+        )
+
+    return notes, all_tags, all_colors
 
 @require_POST
 @login_required
@@ -93,17 +177,6 @@ def delete_note(request, note_id):
     note_instance.is_deleted = True
     note_instance.save()
     return redirect('index')
-
-@login_required
-def show_hidden_notes(request):
-    hidden = True
-    notes = (
-        note.objects.filter(user=request.user, is_deleted=False, is_hidden=True)
-        .prefetch_related('note_image_set')
-        .order_by('-updated_at')
-    )
-    process_note_images(notes)
-    return render(request, 'notes/index.html', {'notes': notes, 'hidden': hidden})
 
 def signup(request):
     # print("signup view")
