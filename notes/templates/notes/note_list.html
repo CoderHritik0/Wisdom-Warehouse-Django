@@ -6,7 +6,7 @@
   <div class="card p-2 shadow-sm h-100 position-relative">
     <!-- 🔹 Tag as pill badge (top-right corner) -->
     <span
-      class="badge rounded-pill position-absolute top-0 end-0 m-2"
+      class="note-tag badge rounded-pill position-absolute top-0 end-0 m-2"
       style="background-color: {{ note.color }};z-index: 1;"
     >
       {{ note.tag| default:"&nbsp" }}
@@ -16,7 +16,7 @@
     {% if note.note_image_set.all %}
       <div
         id="carouselNote{{ note.note_id }}"
-        class="carousel slide"
+        class="carousel slide border rounded-top"
         data-bs-ride="carousel"
         style="height: {{ note.max_height }}px;"
       >

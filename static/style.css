@@ -209,3 +209,16 @@ footer {
   background-color: #f8d7da;
   border-color: #f5c2c7;
 }
+
+.note-tag{
+  color: #000000;
+  text-shadow:
+      -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px 1px 0 #fff,
+      -1px 0px 0 #fff,
+      1px 0px 0 #fff,
+      0px -1px 0 #fff,
+      0px 1px 0 #fff;
+}
