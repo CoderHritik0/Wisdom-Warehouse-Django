@@ -42,7 +42,7 @@
       </div>
     
       {% if selected_tag != 'all' or selected_color != 'all' %}
-        <a href="{% url 'index' %}" class="btn btn-outline-danger ms-auto">
+        <a href="{% if hidden %}{% url 'hidden_notes' %}{% else %}{% url 'index' %}{% endif %}" class="btn btn-outline-danger ms-auto">
           Clear Filters ✖
         </a>
       {% endif %}

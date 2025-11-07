@@ -13,5 +13,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('hidden/', views.show_hidden_notes, name='hidden_notes'),
-    path('set_pin/', views.setPin, name='set_pin'),
+    path('set_pin/', views.index, name='set_pin'),
 ]

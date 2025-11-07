@@ -55,7 +55,7 @@
                       >View Unhidden Notes</a
                     >
                   {% else %}
-                    <a class="dropdown-item" id="viewHiddenBtn" data-bs-toggle="modal" data-bs-target="#{% if request.user.profile.pin %}checkPinModal{% else %}hideNotesModal{% endif %}"
+                    <a class="dropdown-item" id="viewHiddenBtn" data-bs-toggle="modal" data-bs-target="#checkPinModal"
                       >View Hidden Notes</a
                     >
                   {% endif %}
@@ -89,7 +89,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Close
           </button>
-          <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
+          <button type="button" id="confirmDeleteBtn" class="btn btn-outline-danger">
             Delete
           </button>
         </div>
@@ -98,7 +98,7 @@
   </div>
 
   <!-- Hide Notes Pin Modal -->
-  {% if not request.user.profile.pin %}
+  {% comment %} {% if not request.user.profile.pin %}
     <div class="modal" id="hideNotesModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -106,46 +106,79 @@
             <h5 class="modal-title">Enter Note Pin</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <form method="post">
           <div class="modal-body">
-            <p>Please enter the pin to hide the note.</p>
-              <input type="password" class="form-control" id="setNotePin" placeholder="Enter Note Pin" />
+                {% csrf_token %}
+                {{ pin_set_form.pin.label_tag }}
+                {{ pin_set_form.pin }}
+                {{ pin_set_form.pin.errors }}
             </div>
             <div class="modal-footer">
-            <button type="button" id="closeHideModalBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" id="confirmHideBtn" onclick="setPin()" class="btn btn-outline-success">Set Pin</button>
-          </div>
-        </div>
+              <button type="button" id="closeHideModalBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" name="PinSetForm" class="btn btn-outline-success">Set Pin</button>
+            </div>
+          </form>
       </div>
     </div>
-  {% endif %}
+  </div>
+  {% endif %} {% endcomment %}
 
 <!-- Pin Verification Modal -->
-<div class="modal fade" id="checkPinModal" tabindex="-1" aria-labelledby="checkPinModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="checkPinModalLabel">Enter Note Pin</h1>
+ <div class="modal fade" id="checkPinModal" tabindex="-1" aria-labelledby="checkPinModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content">
+       <div class="modal-header">
+        <h1 class="modal-title fs-5" id="checkPinModalLabel">Enter Note PIN</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
+      {% if request.user.profile.pin %}
       <form method="post">
         {% csrf_token %}
-        <div class="modal-body">{{ PinCheckForm.pin }}</div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            {{ verify_pin_form.pin }}
+          </div>
+
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-outline-info">Verify Pin</button>
+          <button type="submit" name="verify_pin" class="btn btn-outline-success">Verify PIN</button>
         </div>
       </form>
+      {% else %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+
+          <div class="mb-3">
+            {{ pin_set_form.pin }}
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="pin_set_form" class="btn btn-outline-success">Set PIN</button>
+        </div>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>
 
-<!-- Incorrect Pin Alert -->
-{% if PinCheckForm.errors %}
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <strong>Incorrect Pin</strong> Please Enter the Correct PIN to View Hidden Notes.
+<!-- Alert Messages -->
+<div id="alert-container">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-{% endif %}
+  {% endfor %}
+  {% endif %}
+</div>
 
 {% endblock %} 
 

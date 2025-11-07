@@ -5,15 +5,6 @@
 {% block title %}Profile | Wisdom WareHouse{% endblock %}
 
 {% block content %}
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
 <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -106,7 +97,7 @@
                             </form>
                         {% else %}
                             <p class="text-muted">Set the 6-digit PIN used to hide and view sensitive notes.</p>
-                            <form id="setPinForm" method="post">
+                            <form id="PinSetForm" method="post">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
