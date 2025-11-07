@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (response.ok) {
       if (deleteType === "note") {
-        window.location.reload();
+        window.location.href = "/notes/";
       } else if (deleteType === "image") {
         const imageContainer = triggerBtn.closest(".position-relative");
         imageContainer.style.transition = "opacity 0.3s";
@@ -81,39 +81,40 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.show();
   });
 });
-function setPin() {
-  const closeHideModalBtn = document.getElementById("closeHideModalBtn");
-  const setPin = document.getElementById("setNotePin");
-  if (!setPin) return;
+// function setPin() {
+//   const closeHideModalBtn = document.getElementById("closeHideModalBtn");
+//   const setPin = document.getElementById("setNotePin");
+//   if (!setPin) return;
 
-  const pinValue = setPin.value.trim();
+//   const pinValue = setPin.value.trim();
 
-  if (!pinValue) {
-    alert("Please enter a PIN.");
-    return;
-  }
+//   if (!pinValue) {
+//     alert("Please enter a PIN.");
+//     return;
+//   }
 
-  if (pinValue.length !== 6 || isNaN(pinValue)) {
-    alert("Please enter a valid 6-digit numeric PIN.");
-    return;
-  }
+//   if (pinValue.length !== 6 || isNaN(pinValue)) {
+//     alert("Please enter a valid 6-digit numeric PIN.");
+//     return;
+//   }
 
-  const formData = new FormData();
-  formData.append("pin", pinValue);
+//   const formData = new FormData();
+//   formData.append("pin", pinValue);
+//   console.log("Setting PIN...", pinValue);
 
-  fetch(`/notes/set_pin/`, {
-    method: "POST",
-    headers: { "X-CSRFToken": getCookie("csrftoken") },
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) throw new Error("Failed to set PIN");
-      return response.json();
-    })
-    .then((data) => {
-      console.log("✅ PIN set successfully:", data);
-      // continue hide note logic...
-    })
-    .catch((error) => console.error(error));
-  window.location.reload();
-}
+//   fetch(`/notes/set_pin/`, {
+//     method: "POST",
+//     headers: { "X-CSRFToken": getCookie("csrftoken") },
+//     body: formData,
+//   })
+//     .then((response) => {
+//       if (!response.ok) throw new Error("Failed to set PIN");
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log("✅ PIN set successfully:", data);
+//       // continue hide note logic...
+//     })
+//     .catch((error) => console.error(error));
+//   window.location.reload();
+// }
