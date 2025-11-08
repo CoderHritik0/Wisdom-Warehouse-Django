@@ -53,21 +53,39 @@
                         <h5 class="fw-semibold mb-4">Change Password</h5>
                         <form id="passwordForm" method="post">
                             {% csrf_token %}
-                            <div class="mb-3">
+                            <div class="mb-3 position-relative">
                                 {{ password_change_form.current_password.label_tag }}
-                                {{ password_change_form.current_password }}
+                                <div class="input-group">
+                                    {{ password_change_form.current_password }}
+                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_current_password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                                 {{ password_change_form.current_password.errors }}
                             </div>
-                            <div class="mb-3">
+
+                            <div class="mb-3 position-relative">
                                 {{ password_change_form.new_password.label_tag }}
-                                {{ password_change_form.new_password }}
+                                <div class="input-group">
+                                    {{ password_change_form.new_password }}
+                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_new_password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                                 {{ password_change_form.new_password.errors }}
                             </div>
-                             <div class="mb-3">
+
+                            <div class="mb-3 position-relative">
                                 {{ password_change_form.confirm_password.label_tag }}
-                                {{ password_change_form.confirm_password }}
+                                <div class="input-group">
+                                    {{ password_change_form.confirm_password }}
+                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_confirm_password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                                 {{ password_change_form.confirm_password.errors }}
                             </div>
+
                             <button type="submit" name="change_password" class="btn btn-primary fw-semibold px-4">Update Password</button>
                         </form>
                     </div>
@@ -82,16 +100,27 @@
                             <form id="pinForm" method="post">
                                 {% csrf_token %}
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 position-relative">
                                         {{ pin_reset_form.current_pin.label_tag }}
-                                        {{ pin_reset_form.current_pin }}
+                                        <div class="input-group">
+                                            {{ pin_reset_form.current_pin }}
+                                            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_current_pin">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
                                         {{ pin_reset_form.current_pin.errors }}
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 position-relative">
                                         {{ pin_reset_form.new_pin.label_tag }}
-                                        {{ pin_reset_form.new_pin }}
+                                        <div class="input-group">
+                                            {{ pin_reset_form.new_pin }}
+                                            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_new_pin">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
                                         {{ pin_reset_form.new_pin.errors }}
                                     </div>
+
                                 </div>
                                 <button type="submit" name="reset_pin" class="btn btn-primary fw-semibold px-4">Update PIN</button>
                             </form>
@@ -100,11 +129,17 @@
                             <form id="PinSetForm" method="post">
                                 {% csrf_token %}
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 position-relative">
                                         {{ pin_set_form.pin.label_tag }}
-                                        {{ pin_set_form.pin }}
+                                        <div class="input-group">
+                                            {{ pin_set_form.pin }}
+                                            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_pin">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
                                         {{ pin_set_form.pin.errors }}
                                     </div>
+
                                     <div class="col-md-6 mb-3">
                                     </div>
                                 </div>

@@ -137,9 +137,18 @@
         {% csrf_token %}
         <div class="modal-body">
 
-          <div class="mb-3">
-            {{ verify_pin_form.pin }}
-          </div>
+          <div class="mb-3 position-relative">
+          {{ verify_pin_form.pin }}
+          
+          <!-- 👁️ Eye toggle button -->
+          <button type="button"
+                  class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password"
+                  tabindex="-1"
+                  data-target="{{ verify_pin_form.pin.id_for_label }}"
+                  title="Show/Hide PIN">
+              <i class="bi bi-eye"></i>
+          </button>
+        </div>
 
         </div>
         <div class="modal-footer">
@@ -152,8 +161,17 @@
         {% csrf_token %}
         <div class="modal-body">
 
-          <div class="mb-3">
+          <div class="mb-3 position-relative">
             {{ pin_set_form.pin }}
+            
+            <!-- 👁️ Eye toggle button -->
+            <button type="button"
+                    class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password"
+                    tabindex="-1"
+                    data-target="{{ pin_set_form.pin.id_for_label }}"
+                    title="Show/Hide PIN">
+                <i class="bi bi-eye"></i>
+            </button>
           </div>
 
         </div>
