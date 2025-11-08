@@ -52,27 +52,37 @@
                 </div>
 
                 <!-- Password1 -->
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3 position-relative">
                   {{ form.password1 }}
                   <label for="{{ form.password1.id_for_label }}">Password</label>
-                    {% if form.password1.errors %}
-                      <div class="text-danger small">
-                        {{ form.password1.errors|striptags }}
-                      </div>
-                    {% endif %}
+                  <button type="button" 
+                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password" 
+                          tabindex="-1" 
+                          data-target="{{ form.password1.id_for_label }}">
+                      <i class="bi bi-eye"></i>
+                  </button>
+                  {% if form.password1.errors %}
+                    <div class="text-danger small mt-1">
+                      {{ form.password1.errors|striptags }}
+                    </div>
+                  {% endif %}
                 </div>
 
                 <!-- Password2 -->
-                <div class="form-floating mb-4">
+                <div class="form-floating mb-4 position-relative">
                   {{ form.password2 }}
-                  <label for="{{ form.password2.id_for_label }}"
-                    >Confirm Password</label
-                  >
-                    {% if form.password2.errors %}
-                      <div class="text-danger small">
-                        {{ form.password2.errors|striptags }}
-                      </div>
-                    {% endif %}
+                  <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                  <button type="button" 
+                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password" 
+                          tabindex="-1" 
+                          data-target="{{ form.password2.id_for_label }}">
+                      <i class="bi bi-eye"></i>
+                  </button>
+                  {% if form.password2.errors %}
+                    <div class="text-danger small mt-1">
+                      {{ form.password2.errors|striptags }}
+                    </div>
+                  {% endif %}
                 </div>
 
                 <!-- Terms -->

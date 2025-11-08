@@ -36,15 +36,25 @@
                     {% endif %}
                 </div>
 
-                <!-- Password1 -->
-                <div class="form-floating mb-3">
+                <!-- Password -->
+                <div class="form-floating mb-3 position-relative">
                   {{ form.password }}
                   <label for="{{ form.password.id_for_label }}">Password</label>
-                    {% if form.password.errors %}
-                      <div class="text-danger small">
-                        {{ form.password.errors|striptags }}
-                      </div>
-                    {% endif %}
+
+                  <!-- 👁️ Eye toggle button -->
+                  <button type="button"
+                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password"
+                          tabindex="-1"
+                          data-target="{{ form.password.id_for_label }}"
+                          title="Show/Hide Password">
+                      <i class="bi bi-eye"></i>
+                  </button>
+
+                  {% if form.password.errors %}
+                    <div class="text-danger small mt-1">
+                      {{ form.password.errors|striptags }}
+                    </div>
+                  {% endif %}
                 </div>
 
                 <div
