@@ -4,11 +4,11 @@
 
 {% block navbar %}
 <!-- Header/Navigation -->
-  <header class="bg-white shadow-sm sticky-top z-3">
-    <nav class="container navbar navbar-expand-md py-2">
+  <header class="navbar sticky-top z-3 py-lg-0">
+    <nav class="container navbar-expand">
       {% if request.path == '/notes/create/'  or '/notes/edit/' in request.path  or '/profile/' in request.path %}
-        <a href="{% url 'index' %}" class="btn btn-outline-secondary rounded-pill px-4 me-3 fw-semibold d-flex align-items-center gap-2"><i class="bi bi-arrow-left"></i></a>
-        <a class="navbar-brand fs-4 fw-bold text-dark" href="{% url 'index' %}">Wisdom Warehouse</a>
+        <a href="{% url 'index' %}" class="btn btn-outline-accent rounded-pill px-4 me-3 fw-semibold d-flex align-items-center gap-2"><i class="bi bi-arrow-left"></i></a>
+        <a class="navbar-brand fs-4 fw-bold" href="{% url 'index' %}">Wisdom Warehouse</a>
         <div class="collapse navbar-collapse" id="main-nav">
           <div class="ms-auto d-flex align-items-center gap-2">
             {% if '/notes/edit' in request.path %}
@@ -16,22 +16,32 @@
               <a
                 href="{% url 'create_note' %}"
                 id="newNoteBtn"
-                class="btn btn-primary rounded-pill px-4 fw-semibold d-flex align-items-center gap-2"
+                class="btn btn-primary btn-hero rounded-pill px-4 fw-semibold d-flex align-items-center gap-2"
               ><i class="bi bi-plus-lg"></i> New Note </a>
             {% endif %}
       {% else %}
-        <a class="navbar-brand fs-4 fw-bold text-dark" href="{% url 'index' %}">Wisdom Warehouse</a>
+        <a class="navbar-brand fs-4 fw-bold" href="{% url 'index' %}">Wisdom Warehouse</a>
         <div class="collapse navbar-collapse" id="main-nav">
           <div class="ms-auto d-flex align-items-center gap-2">
               <!-- New Note Button -->
               <a
                 href="{% url 'create_note' %}"
                 id="newNoteBtn"
-                class="btn btn-primary rounded-pill px-4 fw-semibold d-flex align-items-center gap-2"
+                class="btn btn-primary btn-hero rounded-pill px-4 fw-semibold d-flex align-items-center gap-2"
               >
                 <i class="bi bi-plus-lg"></i> New Note
               </a>
       {% endif %}
+          <div class="theme-switch-wrapper my-3">
+            <label class="theme-switch">
+                <input type="checkbox" id="themeSwitcher">
+                <span class="slider">
+                  <!-- Icons are placed here -->
+                  <i class="bi bi-moon-stars-fill"></i>
+                  <i class="bi bi-sun-fill"></i>
+                </span>
+            </label>
+          </div>
             <div class="dropdown">
               <a
                 href="#"
@@ -86,7 +96,7 @@
           <p id="deleteModalText">Are you sure you want to delete this item?</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-accent" data-bs-dismiss="modal">
             Close
           </button>
           <button type="button" id="confirmDeleteBtn" class="btn btn-outline-danger">
@@ -96,32 +106,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Hide Notes Pin Modal -->
-  {% comment %} {% if not request.user.profile.pin %}
-    <div class="modal" id="hideNotesModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Enter Note Pin</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form method="post">
-          <div class="modal-body">
-                {% csrf_token %}
-                {{ pin_set_form.pin.label_tag }}
-                {{ pin_set_form.pin }}
-                {{ pin_set_form.pin.errors }}
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="closeHideModalBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" name="PinSetForm" class="btn btn-outline-success">Set Pin</button>
-            </div>
-          </form>
-      </div>
-    </div>
-  </div>
-  {% endif %} {% endcomment %}
 
 <!-- Pin Verification Modal -->
  <div class="modal fade" id="checkPinModal" tabindex="-1" aria-labelledby="checkPinModalLabel" aria-hidden="true">
@@ -152,8 +136,8 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" name="verify_pin" class="btn btn-outline-success">Verify PIN</button>
+          <button type="button" class="btn btn-outline-accent" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="verify_pin" class="btn btn-primary">Verify PIN</button>
         </div>
       </form>
       {% else %}

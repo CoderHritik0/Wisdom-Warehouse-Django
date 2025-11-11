@@ -14,6 +14,13 @@ function getCookie(name) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  let theme = localStorage.getItem("theme");
+  if (theme) {
+    document.documentElement.setAttribute("data-bs-theme", theme);
+  } else{
+    localStorage.setItem("theme", "light");
+    document.documentElement.setAttribute("data-bs-theme", "light");
+  }
   /* ---------------------------
      DELETE MODAL LOGIC
   ---------------------------- */
@@ -137,4 +144,24 @@ document.querySelectorAll('.toggle-password').forEach(button => {
             icon.classList.add('bi-eye');
         }
     });
+});
+
+// Script to make the custom toggle switch work with the theme
+const themeSwitcher = document.getElementById('themeSwitcher');
+
+// Set initial state based on current theme
+const currentTheme = localStorage.getItem('theme')? localStorage.getItem('theme') : 'light';
+if (currentTheme === 'dark') {
+    themeSwitcher.checked = true;
+}
+
+// Listen for changes
+themeSwitcher.addEventListener('change', function() {
+    if (this.checked) {
+      localStorage.setItem('theme', 'dark');
+      document.documentElement.setAttribute('data-bs-theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.setAttribute('data-bs-theme', 'light');
+    }
 });

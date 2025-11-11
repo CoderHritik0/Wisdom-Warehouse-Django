@@ -56,7 +56,7 @@
                   {{ form.password1 }}
                   <label for="{{ form.password1.id_for_label }}">Password</label>
                   <button type="button" 
-                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password" 
+                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 toggle-password" 
                           tabindex="-1" 
                           data-target="{{ form.password1.id_for_label }}">
                       <i class="bi bi-eye"></i>
@@ -73,7 +73,7 @@
                   {{ form.password2 }}
                   <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
                   <button type="button" 
-                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 p-0 toggle-password" 
+                          class="btn btn-sm btn-link text-secondary position-absolute top-50 end-0 translate-middle-y me-2 toggle-password" 
                           tabindex="-1" 
                           data-target="{{ form.password2.id_for_label }}">
                       <i class="bi bi-eye"></i>
@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Terms -->
-                <div class="form-check mb-4">
+                {% comment %} <div class="form-check mb-4">
                   <input
                     class="form-check-input"
                     type="checkbox"
@@ -100,11 +100,11 @@
                       >Terms of Service</a
                     >
                   </label>
-                </div>
+                </div> {% endcomment %}
 
                 <div class="d-grid">
                   <button
-                    class="btn btn-primary btn-lg rounded-pill fw-semibold"
+                    class="btn btn-primary btn-hero btn-lg rounded-pill fw-semibold"
                     type="submit"
                   >
                     Create Account
