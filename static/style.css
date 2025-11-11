@@ -4,6 +4,7 @@
   --bs-primary-subtle: #eef2ff;
   --text: #090b0b;
   --background: #e6eae9;
+  --card-bg: #212529;
   --primary: #abedda;
   --secondary: #b7f0e0;
   --accent: #91a03b;
@@ -20,6 +21,31 @@
   --gray-text: #2b2f32;
   --pink: #fcd3d6;
   --pink-text: #e11d48;
+
+  @media screen and (max-width: 768px) {
+    .masonry {
+      column-count: 1;
+    }
+
+    .navbar > .container,
+    nav.navbar-expand {
+      justify-content: center;
+    }
+
+    #main-nav {
+      justify-content: center !important;
+    }
+
+    #main-nav > div {
+      margin: 0 !important;
+    }
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1200px) {
+    .masonry {
+      column-count: 2;
+    }
+  }
 }
 
 :root[data-bs-theme="dark"] {
@@ -45,31 +71,6 @@
 ::selection {
   color: white;
   background-color: darkgray;
-}
-
-@media screen and (max-width: 768px) {
-  .masonry {
-    column-count: 1;
-  }
-
-  .navbar > .container,
-  nav.navbar-expand {
-    justify-content: center;
-  }
-
-  #main-nav {
-    justify-content: center !important;
-  }
-
-  #main-nav > div {
-    margin: 0 !important;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1200px) {
-  .masonry {
-    column-count: 2;
-  }
 }
 
 body {
@@ -367,7 +368,13 @@ footer {
 }
 
 .note-creation-form {
-  background-color: #fff;
+  background-color: var(--card-bg);
+}
+
+.CodeMirror {
+  background-color: var(--bs-body-bg)!important;
+  color: var(--text)!important;
+  border: 0!important;
 }
 
 .alert-error {

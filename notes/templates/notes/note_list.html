@@ -7,7 +7,7 @@
     <!-- 🔹 Tag as pill badge (top-right corner) -->
     <span
       class="note-tag badge rounded-pill position-absolute top-0 end-0 m-2"
-      style="background-color: {{ note.color }};z-index: 1;"
+      style="background-color: {% if note.color == "#ffffff" %}transparent{% else %}{{ note.color }}{% endif %};z-index: 1;"
     >
       {{ note.tag| default:"&nbsp" }}
     </span>
