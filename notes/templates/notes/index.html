@@ -36,7 +36,7 @@
         <select name="color" class="form-select" onchange="this.form.submit()">
           <option value="all">All</option>
           {% for c in all_colors %}
-            <option value="{{ c }}" {% if selected_color == c %}selected{% endif %}>{{ c|title }}</option>
+            <option value="{{ c }}" {% if selected_color == c %}selected{% endif %}>{% if c == "#ffffff" %}No Color{% else %}{{ c|upper }}{% endif %}</option>
           {% endfor %}
         </select>
       </div>
