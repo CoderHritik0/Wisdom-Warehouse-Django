@@ -79,6 +79,13 @@ Run migrations
   python manage.py migrate
 ```
 
+Create Super User for Admin access
+> Enter neccessary details after running command
+```bash
+  python manage.py createsuperuser
+```
+
+
 Start the development server
 
 ```bash
