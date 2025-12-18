@@ -1,0 +1,465 @@
+:root {
+  --bs-primary: #4f46e5;
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-primary-subtle: #eef2ff;
+  --text: #090b0b;
+  --background: #e6eae9;
+  --card-bg: #212529;
+  --primary: #abedda;
+  --secondary: #b7f0e0;
+  --accent: #91a03b;
+  --accent-text: #fff;
+  --shadow: #6c6c6c;
+  --card-bg: #ffffff;
+  --blue: #cfe2ff;
+  --blue-text: #052c65;
+  --purple: #e6ceff;
+  --purple-text: #7c3aed;
+  --teal: #aadcd0;
+  --teal-text: #0d9488;
+  --gray: #e2e3e5;
+  --gray-text: #2b2f32;
+  --pink: #fcd3d6;
+  --pink-text: #e11d48;
+
+  @media screen and (max-width: 768px) {
+    .masonry {
+      column-count: 1;
+    }
+
+    .navbar > .container,
+    nav.navbar-expand {
+      justify-content: center;
+    }
+
+    #main-nav {
+      justify-content: center !important;
+    }
+
+    #main-nav > div {
+      margin: 0 !important;
+    }
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1200px) {
+    .masonry {
+      column-count: 2;
+    }
+  }
+}
+
+:root[data-bs-theme="dark"] {
+  --text: #f4f6f6;
+  --background: #151918;
+  --primary: #125441;
+  --secondary: #0f4838;
+  --accent: #b5c45f;
+  --accent-text: #000;
+  --card-bg: #000;
+  --blue: #00122e;
+  --blue-text: #99c0fa;
+  --purple: #2c0259;
+  --purple-text: #7c3aed;
+  --teal: #23584b;
+  --teal-text: #69f2e7;
+  --gray: #3d3f41;
+  --gray-text: #cdd2d5;
+  --pink: #2b0306;
+  --pink-text: #e21d48;
+}
+
+::selection {
+  color: white;
+  background-color: darkgray;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+}
+
+/* Navbar CSS */
+.navbar-brand {
+  font-size: xx-large;
+  color: var(--accent);
+}
+
+.navbar {
+  background-color: var(--card-bg);
+  box-shadow: 0 0.15rem 0.25rem var(--shadow);
+}
+
+.navbar-brand:hover {
+  filter: brightness(0.7);
+  color: var(--accent);
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: var(--text);
+  text-decoration: none;
+  background-color: var(--accent);
+}
+
+/* Button CSS */
+.btn:hover {
+  filter: brightness(0.85);
+  border-color: transparent;
+}
+
+:not(.btn-check) + .btn:active,
+.btn:first-child:active,
+.btn.active {
+  color: var(--text);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary {
+  color: var(--text);
+  background-color: var(--primary);
+  border-color: var(--primary);
+  border-radius: 12px;
+}
+
+.btn-hero {
+  padding: 10px 24px;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary);
+  color: var(--text);
+}
+
+.btn-outline-primary {
+  --bs-btn-border-color: var(--primary);
+  --bs-btn-color: var(--text);
+  --bs-btn-hover-bg: var(--primary);
+  --bs-btn-hover-border-color: var(--primary);
+  --bs-btn-hover-color: #ffffff;
+  border-radius: 12px;
+  padding: 10px 24px;
+  font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+.btn-outline-accent {
+  --bs-btn-border-color: var(--accent);
+  --bs-btn-color: var(--text);
+  --bs-btn-hover-bg: var(--accent);
+  --bs-btn-hover-border-color: var(--accent);
+  --bs-btn-hover-color: #ffffff;
+  border-radius: 12px;
+}
+
+.btn-accent {
+  color: var(--accent-text);
+  background-color: var(--accent);
+  border-color: var(--accent);
+  border-radius: 12px;
+}
+
+.btn-accent:hover {
+  color: var(--accent-text);
+  background-color: var(--accent);
+  filter: brightness(0.85);
+}
+
+.btn-outline-accent:hover {
+  background-color: var(--accent);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.btn-danger {
+  background-color: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #ffffff;
+  border-radius: 12px;
+}
+
+.btn-outline-danger {
+  background-color: transparent;
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  border-radius: 12px;
+}
+
+.btn-outline-danger:hover {
+  background-color: #ff6b6b;
+  color: #ffffff;
+  border-color: #ff6b6b;
+}
+
+.btn-outline-secondary {
+  --bs-btn-border-color: var(--secondary);
+  --bs-btn-color: var(--text);
+  --bs-btn-hover-bg: var(--secondary);
+  --bs-btn-hover-border-color: var(--secondary);
+  --bs-btn-hover-color: var(--text);
+  border-radius: 12px;
+}
+
+/* Hero Section */
+.hero {
+  padding: 6rem 0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.hero span {
+  background: linear-gradient(120deg, var(--accent), var(--primary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+/* Features Section */
+.feature-card {
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 40px 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.icon-blue {
+  color: #3b82f6;
+  background-color: rgb(59, 130, 246, 0.3);
+}
+
+.icon-purple {
+  color: #ae80fc;
+  background-color: rgb(174, 128, 252, 0.3);
+}
+
+.icon-pink {
+  color: #ffcdd1;
+  background-color: #ffcdd14d;
+}
+
+/* Optional subtle hover effect on icons */
+.icon-wrapper:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Footer CSS */
+footer {
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  padding: 20px;
+  text-align: center;
+  color: var(--text);
+  box-shadow: 0 -0.125rem 0.25rem var(--shadow);
+}
+
+/* Custom color classes for feature Page */
+
+.blue-feature {
+  background-color: var(--blue);
+  color: var(--blue-text);
+}
+
+.purple-feature {
+  background-color: var(--purple);
+  color: var(--purple-text);
+}
+
+.teal-feature {
+  background-color: var(--teal);
+  color: var(--teal-text);
+}
+
+.gray-feature {
+  background-color: var(--gray);
+  color: var(--gray-text);
+}
+
+.pink-feature {
+  background-color: var(--pink);
+  color: var(--pink-text);
+}
+
+/* form css */
+.form-floating > .form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.link-primary {
+  color: var(--bs-primary);
+}
+
+.link-primary:hover,
+.link-primary:focus {
+  color: #4338ca;
+}
+
+.bg-secondary {
+  background-color: var(--secondary) !important;
+}
+
+.bg-accent {
+  background-color: var(--accent) !important;
+  color: var(--accent-text) !important;
+}
+
+.bg-accent::placeholder {
+  color: var(--accent-text) !important;
+}
+
+.editor-toolbar {
+  background-color: var(--secondary);
+  border-bottom: 1px solid #ced4da;
+}
+
+/* Masonry Layout for Notes */
+.masonry {
+  column-count: 3; /* Adjust number of columns */
+  column-gap: 1rem;
+}
+
+.masonry .card {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.card-img {
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.note-creation-form {
+  background-color: var(--card-bg);
+}
+
+.CodeMirror {
+  background-color: var(--bs-body-bg)!important;
+  color: var(--text)!important;
+  border: 0!important;
+}
+
+.alert-error {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
+
+.note-tag {
+  color: #000000;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff, -1px 0px 0 #fff, 1px 0px 0 #fff, 0px -1px 0 #fff,
+    0px 1px 0 #fff;
+}
+
+/* Custom Toggle Switch */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider track */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background);
+  transition: 0.4s;
+  border-radius: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+/* Icons inside the track */
+.slider .bi-sun-fill {
+  color: #f0ad4e;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+.slider .bi-moon-stars-fill {
+  color: var(--bs-primary);
+  transition: opacity 0.4s;
+}
+
+/* The sliding handle */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+/* Checked state (dark mode) */
+input:checked + .slider {
+  background-color: #343a40; /* A dark background */
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
